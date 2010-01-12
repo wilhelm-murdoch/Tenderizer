@@ -1,52 +1,26 @@
 <?php
 
-class Tenderizer
+/***
+ * TenderizerCategory
+ *
+ * This class contains PHP bindings for interaction with Tender categories.
+ *
+ * @package Tenderizer
+ * @author Daniel Wilhelm II Murdoch <wilhelm.murdoch@gmail.com>
+ * @license MIT License <http://www.opensource.org/licenses/mit-license.php>
+ * @copyright Copyright (c) 2010, Daniel Wilhelm II Murdoch
+ * @link http://www.thedrunkenepic.com
+ * @version 1.0.0
+ ***/
+class TenderizerRequest
 {
-	const HTTP_METHOD_GET    = 1;
-	const HTTP_METHOD_POST   = 2;
-	const HTTP_METHOD_PUT    = 4;
-	const HTTP_METHOD_DELETE = 8;
+	private static $cache = array();
 
-	protected $site;
-	protected $email;
-	protected $password;
-	protected $service;
-	private $cache;
-
-	public function __construct($site, $email = null, $password = null)
+	protected static function request($url = null, $method = TenderizerConfig::HTTP_METHOD_POST, array $values = array())
 	{
-		$this->site     = $site;
-		$this->email    = $email;
-		$this->password = $password;
-		$this->service  = 'api.tenderapp.com';
-		$this->cache    = array();
-	}
+		$curl = curl_init(is_null($url) ? TenderizerConfig::$service . '/' . TenderizerConfig::$site : TenderizerConfig::$service . '/' . TenderizerConfig::$site . "/{$url}");
 
-	public function factory($resource)
-	{
-		$class_name = 'Tenderizer' . ucwords(strtolower($resource));
-		$class_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . "{$class_name}.php";
-
-		if(false == file_exists($class_path))
-		{
-			throw new TenderizerException("Class `{$class_name}` for resource `{$resource}` does not exist.");
-		}
-
-		require_once $class_path;
-
-		if(false == class_exists($class_name))
-		{
-			throw new TenderizerException("Class `{$class_name}` for resource `{$resource}` does not exist.");
-		}
-
-		return new $class_name($this->site, $this->email, $this->password);
-	}
-
-	protected function request($url = null, $method = self::HTTP_METHOD_POST, array $values = array())
-	{
-		$curl = curl_init(is_null($url) ? "{$this->service}/{$this->site}" : "{$this->service}/{$this->site}/{$url}");
-
-		curl_setopt($curl, CURLOPT_USERPWD, "{$this->email}:{$this->password}");
+		curl_setopt($curl, CURLOPT_USERPWD, TenderizerConfig::$email . ':' .TenderizerConfig::$password);
 		curl_setopt($curl, CURLOPT_HEADER, true);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -57,11 +31,11 @@ class Tenderizer
 			'Content-Type: application/json'
 		);
 
-		if($values && $method & (self::HTTP_METHOD_PUT | self::HTTP_METHOD_POST))
+		if($values && $method & (TenderizerConfig::HTTP_METHOD_PUT | TenderizerConfig::HTTP_METHOD_POST))
 		{
 			$json_values = json_encode($values);
 
-			if($method & self::HTTP_METHOD_PUT)
+			if($method & TenderizerConfig::HTTP_METHOD_PUT)
 			{
 				curl_setopt($curl, CURLOPT_PUT, true);
 				curl_setopt($curl, CURLOPT_POST, false);
@@ -90,7 +64,6 @@ class Tenderizer
 		{
 			throw new TenderizerException('Invalid header response.');
 		}
-
 
 		$http_status = array_pop(array_pop($match));
 

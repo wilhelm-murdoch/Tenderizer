@@ -8,31 +8,20 @@
 // TODO: Document
 // TODO: Fix PUT updates
 
-
-class TenderizerException extends Exception {}
-
 try
 {
-	require_once 'constants.php';
-	require_once 'TenderizerIterator.php';
-	require_once 'Tenderizer.php';
+	include_once 'TenderizerRequest.php';
 
-	$Tenderizer = new Tenderizer(TENDER_SITE, TENDER_EMAIL, TENDER_PASSWORD);
+	foreach(glob('Tenderizer*.php') as $file)
+	{
+		include_once $file;
+	}
 
 	// Category: 17841
 
 	echo '<pre>';
-	print_r($Tenderizer->factory('site')->get()->current());
+	print_r(TenderizerCategory::get());
 	echo '</pre>';
-
-	exit();
-
-	foreach($Tenderizer->factory('discussion')->getByPage() as $Discussion)
-	{
-		echo '<pre>';
-		print_r($Discussion);
-		echo '</pre>';
-	}
 }
 catch(TenderizerException $TenderizerException)
 {
