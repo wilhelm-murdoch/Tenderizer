@@ -9,8 +9,6 @@ class TenderizerSite extends Tenderizer
 
 	public function get()
 	{
-		$Response = array($this->request());
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request()));
 	}
 }

@@ -9,15 +9,11 @@ class TenderizerCategory extends Tenderizer
 
 	public function getByPage($page = 1)
 	{
-		$Response = $this->request("categories");
-
-		return new TenderizerIterator($Response->categories, $Response->offset, $Response->total, $Response->per_page);
+		return new TenderizerIterator($this->request('categories'), 'categories');
 	}
 
 	public function getById($category_id)
 	{
-		$Response = array($this->request("categories/{$category_id}"));
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request("categories/{$category_id}")));
 	}
 }

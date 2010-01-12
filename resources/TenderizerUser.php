@@ -9,16 +9,12 @@ class TenderizerUser extends Tenderizer
 
 	public function getByPage($page = 1)
 	{
-		$Response = $this->request("users");
-
-		return new TenderizerIterator($Response->users, $Response->offset, $Response->total, $Response->per_page);
+		return new TenderizerIterator($this->request('users'), 'users');
 	}
 
 	public function getById($user_id)
 	{
-		$Response = array($this->request("users/{$user_id}"));
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request("users/{$user_id}")));
 	}
 
 	public function login($email, $password)
@@ -29,9 +25,7 @@ class TenderizerUser extends Tenderizer
 			'password' => $password
 		);
 
-		$Response = array($this->request("users", array('Content-Type: application/json'), $values, self::HTTP_METHOD_POST));
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request('users', self::HTTP_METHOD_POST, $values)));
 	}
 
 	public function add($email, $password, $confirmation, $name = '', $title = '')
@@ -45,8 +39,6 @@ class TenderizerUser extends Tenderizer
 			'title'                 => $title
 		);
 
-		$Response = array($this->request("users", array('Content-Type: application/json'), $values, self::HTTP_METHOD_POST));
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request('users', self::HTTP_METHOD_POST, $values)));
 	}
 }

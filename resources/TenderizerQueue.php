@@ -9,15 +9,11 @@ class TenderizerQueue extends Tenderizer
 
 	public function getByPage($page = 1)
 	{
-		$Response = $this->request("queues");
-
-		return new TenderizerIterator($Response->queues, $Response->offset, $Response->total, $Response->per_page);
+		return new TenderizerIterator($this->request('queues'), 'named_queues');
 	}
 
 	public function getById($queue_id)
 	{
-		$Response = array($this->request("queues/{$queue_id}"));
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request("queues/{$queue_id}")));
 	}
 }

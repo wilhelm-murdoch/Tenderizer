@@ -1,6 +1,6 @@
 <?php
 
-class TenderIterator implements Iterator, ArrayAccess, Countable
+class TenderizerIterator implements Iterator, ArrayAccess, Countable
 {
 	private $results;
 	private $offset;
@@ -8,12 +8,12 @@ class TenderIterator implements Iterator, ArrayAccess, Countable
 	private $per_page;
 	private $position;
 
-	public function __construct(array &$results = array(), $offset = null, $total = null, $per_page = null)
+	public function __construct($Results = null, $resource = null)
 	{
-		$this->results  = &$results;
-		$this->offset   = $offset;
-		$this->total    = $total;
-		$this->per_page = $per_page;
+		$this->results  = is_null($resource) ? $Results : (isset($Results->$resource) ? $Results->$resource : $Results->results);
+		$this->offset   = isset($Results->offset) ? $Results->offset : null;
+		$this->total    = isset($Results->total) ? $Results->offset : null;
+		$this->per_page = isset($Results->per_page) ? $Results->offset : null;
 		$this->position = 0;
 	}
 

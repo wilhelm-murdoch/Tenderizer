@@ -9,15 +9,11 @@ class TenderizerSection extends Tenderizer
 
 	public function getByPage($page = 1)
 	{
-		$Response = $this->request("sections");
-
-		return new TenderizerIterator($Response->sections, $Response->offset, $Response->total, $Response->per_page);
+		return new TenderizerIterator($this->request('sections'), 'sections');
 	}
 
 	public function getById($section_id)
 	{
-		$Response = array($this->request("sections/{$section_id}"));
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request("sections/{$section_id}")));
 	}
 }

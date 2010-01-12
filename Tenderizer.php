@@ -42,7 +42,7 @@ class Tenderizer
 		return new $class_name($this->site, $this->email, $this->password);
 	}
 
-	protected function request($url = null, array $headers = array(), array $values = array(), $method = self::HTTP_METHOD_GET)
+	protected function request($url = null, $method = self::HTTP_METHOD_POST, array $values = array())
 	{
 		$curl = curl_init(is_null($url) ? "{$this->service}/{$this->site}" : "{$this->service}/{$this->site}/{$url}");
 
@@ -50,6 +50,12 @@ class Tenderizer
 		curl_setopt($curl, CURLOPT_HEADER, true);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+		$headers = array
+		(
+			'Accept: application/vnd.tender-v1+json',
+			'Content-Type: application/json'
+		);
 
 		if($values && $method & (self::HTTP_METHOD_PUT | self::HTTP_METHOD_POST))
 		{
@@ -71,7 +77,7 @@ class Tenderizer
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $json_values);
 		}
 
-		curl_setopt($curl, CURLOPT_HTTPHEADER, array_merge($headers, array('Accept: application/vnd.tender-v1+json')));
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
 		if(false === $response = curl_exec($curl))
 		{
@@ -84,6 +90,7 @@ class Tenderizer
 		{
 			throw new TenderizerException('Invalid header response.');
 		}
+
 
 		$http_status = array_pop(array_pop($match));
 

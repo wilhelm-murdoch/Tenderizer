@@ -9,16 +9,12 @@ class TenderizerFaq extends Tenderizer
 
 	public function getByPage($page = 1)
 	{
-		$Response = $this->request("faqs");
-
-		return new TenderizerIterator($Response->faqs, $Response->offset, $Response->total, $Response->per_page);
+		return new TenderizerIterator($this->request('faqs'), 'faqs');
 	}
 
 	public function getById($faq_id)
 	{
-		$Response = array($this->request("faqs/{$faq_id}"));
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request("faqs/{$faq_id}")));
 	}
 
 	public function add($section_id, $title, $body, $published_at = null, $keywords = null)
@@ -31,9 +27,7 @@ class TenderizerFaq extends Tenderizer
 			'keywords'     => $keywords
 		);
 
-		$Response = array($this->request("sections/{$section_id}/faqs", array('Content-Type: application/json'), $values, self::HTTP_METHOD_POST));
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request("sections/{$section_id}/faqs", self::HTTP_METHOD_POST, $values)));
 	}
 
 	public function update($faq_id, $title, $body, $published_at = null, $keywords = null)
@@ -46,8 +40,6 @@ class TenderizerFaq extends Tenderizer
 			'keywords'     => $keywords
 		);
 
-		$Response = array($this->request("faqs/{$faq_id}", array('Content-Type: application/json'), $values, self::HTTP_METHOD_PUT));
-
-		return new TenderizerIterator($Response);
+		return new TenderizerIterator(array($this->request("faqs/{$faq_id}", self::HTTP_METHOD_PUT, $values)));
 	}
 }
