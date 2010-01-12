@@ -10,12 +10,11 @@
 
 try
 {
-	include_once 'TenderizerRequest.php';
-
 	foreach(glob('Tenderizer*.php') as $file)
-	{
 		include_once $file;
-	}
+
+	foreach(glob('resources/Tenderizer*.php') as $file)
+		include_once $file;
 
 	// Category: 17841
 
