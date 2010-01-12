@@ -96,7 +96,27 @@ class TenderizerDiscussion extends TenderizerRequest
 			throw new TenderizerException("State `{$state}` is not a valid option.");
 		}
 
-		return new TenderizerIterator(self::request("discussions/{$state}"), 'discussions');
+		return new TenderizerIterator(self::request("discussions/{$state}?page={$page}"), 'discussions');
+	}
+
+   // ! Executor Method
+
+   /**
+	* Returns a list of discussions associated with a specified category.
+	*
+	* <code>
+	*     $Discussions = TenderizerDiscussion::getByCategoryId($category_id, $page);
+	* </code>
+	*
+	* @param Integer $category_id The ID of the category to search.
+	* @param Integer $page        The page number to return.
+	* @author Daniel Wilhelm II Murdoch <wilhelm.murdoch@gmail.com>
+	* @access Public Static
+	* @return Object TenderizerIterator
+	*/
+	public static function getByCategoryId($category_id, $page = 1)
+	{
+		return new TenderizerIterator(self::request("categories/{$category_id}/discussions?page={$page}"), 'discussions');
 	}
 
 
@@ -123,7 +143,7 @@ class TenderizerDiscussion extends TenderizerRequest
 			throw new TenderizerException("State `{$state}` is not a valid option.");
 		}
 
-		return new TenderizerIterator(self::request("categories/{$category_id}/discussions/{$state}"), 'discussions');
+		return new TenderizerIterator(self::request("categories/{$category_id}/discussions/{$state}?page={$page}"), 'discussions');
 	}
 
 

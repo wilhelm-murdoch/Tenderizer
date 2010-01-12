@@ -7,20 +7,31 @@
 // TODO: Unit test
 // TODO: Document
 // TODO: Fix PUT updates
+// TODO: Address 'Discussion Actions' 404 messages
+// TODO: Add TenderizerDiscussion::getByCategoryId($category_id); method
 
 try
 {
-	foreach(glob('Tenderizer*.php') as $file)
+	foreach(array_merge(glob('Tenderizer*.php'), glob('resources/Tenderizer*.php')) as $file)
+	{
 		include_once $file;
+	}
 
-	foreach(glob('resources/Tenderizer*.php') as $file)
-		include_once $file;
 
-	// Category: 17841
-
-	echo '<pre>';
-	print_r(TenderizerCategory::get());
-	echo '</pre>';
+	/**
+	 * The following code will display the first page of categories as well as
+	 * the first page of all associated discussions:
+	 */
+	foreach(TenderizerCategory::get() as $Category)
+	{
+		echo "<h2>{$Category->name}</h2>";
+		echo '<ol>';
+		foreach(TenderizerDiscussion::getByCategoryId($Category->id) as $Discussion)
+		{
+			echo "<li>{$Discussion->title}</li>";
+		}
+		echo '</ol>';
+	}
 }
 catch(TenderizerException $TenderizerException)
 {
