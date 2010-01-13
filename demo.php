@@ -5,7 +5,9 @@
 
 try
 {
-	foreach(array_merge(glob('Tenderizer*.php'), glob('resources/Tenderizer*.php')) as $file) include_once $file;
+	foreach(array_merge(glob('Tenderizer*.php'), glob('resources/Tenderizer*.php')) as $file)
+		if($file != 'TenderizerConfig.php')
+			include_once $file;
 
 	/**
 	 * The following code will display the first page of categories as well as

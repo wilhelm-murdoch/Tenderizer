@@ -46,8 +46,6 @@ class TenderizerRequest
 				break;
 		}
 
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
 		if($values)
 		{
 			$json_values = json_encode($values);
@@ -73,6 +71,7 @@ class TenderizerRequest
 			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
 		}
 
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
 		if(false === $response = curl_exec($curl))
