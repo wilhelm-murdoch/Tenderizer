@@ -16,15 +16,14 @@ class TenderizerException extends Exception
 
 	public function getStatus()
 	{
-		$Status = new stdClass;
-
-		$Status->status  = $this->http_status;
-		$Status->message = json_decode($this->payload);
-		$Status->file    = self::getFile();
-		$Status->line    = self::getLine();
-		$Status->curl    = $this->curl_info;
-
-		return $Status;
+		return array
+		(
+			'status'  => $this->http_status,
+			'message' => json_decode($this->payload),
+			'file'    => self::getFile(),
+			'line'    => self::getLine(),
+			'curl'    => $this->curl_info
+		);
 	}
 
 	public function __toString()
