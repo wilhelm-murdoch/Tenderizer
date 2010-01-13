@@ -68,7 +68,7 @@ class TenderizerRequest
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $json_values);
 		}
 
-		if($method & TenderizerConfig::HTTP_METHOD_DELETE)
+		if($method == TenderizerConfig::HTTP_METHOD_DELETE)
 		{
 			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
 		}
