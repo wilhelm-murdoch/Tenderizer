@@ -99,6 +99,7 @@ class TenderizerDiscussion extends TenderizerRequest
 		return new TenderizerIterator(self::request("discussions/{$state}?page={$page}"), 'discussions');
 	}
 
+
    // ! Executor Method
 
    /**
@@ -179,7 +180,7 @@ class TenderizerDiscussion extends TenderizerRequest
 			'skip_spam'    => $skip_spam
 		);
 
-		return new TenderizerIterator(array(self::request("categories/{$category_id}/discussions", $values)));
+		return new TenderizerIterator(array(self::request("categories/{$category_id}/discussions", TenderizerConfig::HTTP_METHOD_POST, $values)));
 	}
 
 
@@ -211,7 +212,7 @@ class TenderizerDiscussion extends TenderizerRequest
 			'skip_spam'    => $skip_spam
 		);
 
-		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/comments", $values)));
+		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/comments", TenderizerConfig::HTTP_METHOD_POST, $values)));
 	}
 
 

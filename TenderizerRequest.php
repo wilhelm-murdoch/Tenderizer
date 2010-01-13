@@ -18,18 +18,18 @@ class TenderizerRequest
 
 	protected static function request($url = null, $method = TenderizerConfig::HTTP_METHOD_POST, array $values = array())
 	{
+		$headers = array
+		(
+			'Accept: application/vnd.tender-v1+json',
+			'Content-Type: application/json'
+		);
+
 		$curl = curl_init(is_null($url) ? TenderizerConfig::$service . '/' . TenderizerConfig::$site : TenderizerConfig::$service . '/' . TenderizerConfig::$site . "/{$url}");
 
 		curl_setopt($curl, CURLOPT_USERPWD, TenderizerConfig::$email . ':' .TenderizerConfig::$password);
 		curl_setopt($curl, CURLOPT_HEADER, true);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-		$headers = array
-		(
-			'Accept: application/vnd.tender-v1+json',
-			'Content-Type: application/json'
-		);
 
 		if($values && $method & (TenderizerConfig::HTTP_METHOD_PUT | TenderizerConfig::HTTP_METHOD_POST))
 		{
@@ -51,12 +51,19 @@ class TenderizerRequest
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $json_values);
 		}
 
+		if($method & TenderizerConfig::HTTP_METHOD_DELETE)
+		{
+			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+		}
+
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
 		if(false === $response = curl_exec($curl))
 		{
 			throw new TenderizerException(curl_error($curl));
 		}
+
+		$info = curl_getinfo($curl);
 
 		curl_close($curl);
 
@@ -65,14 +72,13 @@ class TenderizerRequest
 			throw new TenderizerException('Invalid header response.');
 		}
 
-		$http_status = array_pop(array_pop($match));
+		$http_status = $info['http_code'];
 
 		$response_bits = explode("\r\n\r\n", $response);
 
 		array_shift($response_bits);
 
 		$response = implode("\r\n\r\n", $response_bits);
-
 
 		switch($http_status)
 		{
