@@ -232,7 +232,7 @@ class TenderizerDiscussion extends TenderizerRequest
 	*/
 	public static function toggle($discussion_id)
 	{
-		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/toggle")));
+		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/toggle", TenderizerConfig::HTTP_METHOD_POST)));
 	}
 
 

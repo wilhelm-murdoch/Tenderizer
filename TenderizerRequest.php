@@ -49,24 +49,25 @@ class TenderizerRequest
 		if($values)
 		{
 			$json_values = json_encode($values);
-
-			if($method & TenderizerConfig::HTTP_METHOD_POST)
-			{
-				curl_setopt($curl, CURLOPT_PUT, false);
-				curl_setopt($curl, CURLOPT_POST, true);
-			}
-			else if($method & TenderizerConfig::HTTP_METHOD_PUT)
-			{
-				curl_setopt($curl, CURLOPT_PUT, true);
-				curl_setopt($curl, CURLOPT_POST, false);
-
-				$headers[] = 'Content-Length: ' . strlen($json_values);
-			}
-
+			$headers[] = 'Content-Length: ' . strlen($json_values);
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $json_values);
 		}
+		else 
+		{
+		  //$headers[] = 'Content-Length: 0';
+		}
 
-		if($method & TenderizerConfig::HTTP_METHOD_DELETE)
+		curl_setopt($curl, CURLOPT_PUT,  false);
+		curl_setopt($curl, CURLOPT_POST, false);
+		if($method & TenderizerConfig::HTTP_METHOD_POST)
+		{
+			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+		}
+		else if($method & TenderizerConfig::HTTP_METHOD_PUT)
+		{
+			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+		}
+		else if($method & TenderizerConfig::HTTP_METHOD_DELETE)
 		{
 			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
 		}
