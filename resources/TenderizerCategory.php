@@ -42,7 +42,7 @@ class TenderizerCategory extends TenderizerRequest
 	*/
 	public static function get($page = 1)
 	{
-		return new TenderizerIterator(self::request("categories?page={$page}"), 'categories');
+		return new TenderizerIterator(self::request('categories' . self::params(array('page' => $page))), 'categories');
 	}
 
 

@@ -1,14 +1,7 @@
 <?php
 
-// TODO: Implement caching mechanisms
-// TODO: Allow for all 3 types of authentication
-// TODO: Parameter validation (add $page params, etc...)
-// TODO: Better error reporting
-// TODO: Unit test
-// TODO: Document
 // TODO: Fix PUT updates
 // TODO: Address 'Discussion Actions' 404 messages
-// TODO: Add TenderizerDiscussion::getByCategoryId($category_id); method
 
 try
 {
@@ -31,5 +24,7 @@ try
 }
 catch(TenderizerException $TenderizerException)
 {
-	echo $TenderizerException->getMessage();
+	echo '<pre>';
+	print_r($TenderizerException->getStatus());
+	echo '</pre>';
 }

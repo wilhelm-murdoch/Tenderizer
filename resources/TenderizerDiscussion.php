@@ -50,7 +50,7 @@ class TenderizerDiscussion extends TenderizerRequest
 	*/
 	public static function get($page = 1)
 	{
-		return new TenderizerIterator(self::request("discussions?page={$page}"), 'discussions');
+		return new TenderizerIterator(self::request('discussions' . self::params(array('page' => $page))), 'discussions');
 	}
 
 
@@ -93,10 +93,10 @@ class TenderizerDiscussion extends TenderizerRequest
 	{
 		if(false == in_array($state, self::$valid_states))
 		{
-			throw new TenderizerException("State `{$state}` is not a valid option.");
+			throw new TenderizerException("State `{$state}` is not a valid option.", 422);
 		}
 
-		return new TenderizerIterator(self::request("discussions/{$state}?page={$page}"), 'discussions');
+		return new TenderizerIterator(self::request("discussions/{$state}" . self::params(array('page' => $page))), 'discussions');
 	}
 
 
@@ -117,7 +117,7 @@ class TenderizerDiscussion extends TenderizerRequest
 	*/
 	public static function getByCategoryId($category_id, $page = 1)
 	{
-		return new TenderizerIterator(self::request("categories/{$category_id}/discussions?page={$page}"), 'discussions');
+		return new TenderizerIterator(self::request("categories/{$category_id}/discussions" . self::params(array('page' => $page))), 'discussions');
 	}
 
 
@@ -141,10 +141,10 @@ class TenderizerDiscussion extends TenderizerRequest
 	{
 		if(false == in_array($state, self::$valid_states))
 		{
-			throw new TenderizerException("State `{$state}` is not a valid option.");
+			throw new TenderizerException("State `{$state}` is not a valid option.", 422);
 		}
 
-		return new TenderizerIterator(self::request("categories/{$category_id}/discussions/{$state}?page={$page}"), 'discussions');
+		return new TenderizerIterator(self::request("categories/{$category_id}/discussions/{$state}" . self::params(array('page' => $page))), 'discussions');
 	}
 
 
@@ -293,7 +293,7 @@ class TenderizerDiscussion extends TenderizerRequest
 	*/
 	public static function queue($discussion_id, $queue_id)
 	{
-		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/queue?queue={$queue_id}")));
+		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/queue" . self::params(array('queue' => $queue_id)))));
 	}
 
 
@@ -314,7 +314,7 @@ class TenderizerDiscussion extends TenderizerRequest
 	*/
 	public static function unqueue($discussion_id, $queue_id)
 	{
-		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/unqueue?queue={$queue_id}")));
+		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/unqueue" . self::params(array('queue' => $queue_id)))));
 	}
 
 
@@ -375,7 +375,7 @@ class TenderizerDiscussion extends TenderizerRequest
 	*/
 	public static function move($discussion_id, $category_id)
 	{
-		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/change_category?to={$category_id}")));
+		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}/change_category" . self::params(array('to' => $category_id)))));
 	}
 
 
@@ -415,6 +415,6 @@ class TenderizerDiscussion extends TenderizerRequest
 	*/
 	public static function spam($discussion_id)
 	{
-		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}?type=spam", TenderizerConfig::HTTP_METHOD_DELETE)));
+		return new TenderizerIterator(array(self::request("discussions/{$discussion_id}" . self::params(array('type' => 'spam')), TenderizerConfig::HTTP_METHOD_DELETE)));
 	}
 }
